@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 /* 
     AppContainer is a component, provided by react-hot-loader, 
@@ -10,11 +11,16 @@ import { AppContainer } from 'react-hot-loader';
     Note that <AppContainer> must only wrap a single React component.
 */
 import App from './components/App';
+import configureStore from './stores/configureStore';
+
+const store = configureStore();
 
 function render(Component) {
     ReactDOM.render(
         <AppContainer>
-            <Component />
+            <Provider store={store}>
+                <Component />
+            </Provider>
         </AppContainer>
     ,document.getElementById('root'));
 }
