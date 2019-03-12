@@ -10,7 +10,6 @@ import rootSaga from '../sagas';
 export default function configureStore(initialState) {
     const sagaMiddleware = createSagaMiddleware()
     const myRouterMiddleware = routerMiddleware(history);
-    const initialState = {};
     const middleware = [myRouterMiddleware, sagaMiddleware];
     const store = createStore(rootReducer(history),
         initialState,
