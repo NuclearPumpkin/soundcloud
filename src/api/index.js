@@ -1,39 +1,44 @@
 
 import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
+import Cookies from 'js-cookie';
+import { CLIENT_ID, TEMP_CLIENT_ID } from '../constants/authentication';
 
 const superagent = superagentPromise(_superagent, global.Promise);
-let API_ROOT = ''
-if (process.env.NODE_ENV === 'production') {
-  API_ROOT = process.env.REACT_APP_API_ROOT; 
-} else {
-  API_ROOT = 'http://localhost:4220/api';
-}
+const API_ROOT = `//api.soundcloud.com/`;
+//  eslint-disable-next-line
+let AUTH_PARAM = null;
 
 const responseBody = res => res.body;
 
-let token = null;
-const tokenPlugin = req => {
-  if (token) {
-    req.set('authorization', `Token ${token}`);
-  }
-}
-
-
 const requests = {
-  del: (url, body) =>
-    superagent.del(`${API_ROOT}${url}`).send(body).use(tokenPlugin).then(responseBody),
-  get: url =>
-    superagent.get(`${API_ROOT}${url}`).use(tokenPlugin).then(responseBody),
-  put: (url, body) =>
-    superagent.put(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
-  post: (url, body) =>
-    superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
+  get: (url) => superagent.get(`${API_ROOT}${url}${AUTH_PARAM}`).then(responseBody),
 };
 
-const setAuthToken = (_token) => { token = _token; }
+const Genres = {
+  get: (url, symbol) => requests.get(`${url}${symbol}`),
+};
+
+const setAccessToken = () => {
+  const accessToken = Cookies.get('accessToken');
+  if (!accessToken) {
+    setClientID();
+  }
+  AUTH_PARAM = `oauth_token=${accessToken}`;
+};
+
+const setClientID = () => {
+  AUTH_PARAM = `client_id=${CLIENT_ID}`;
+};
+
+const setTempClientID = () => {
+  AUTH_PARAM = `client_id=${TEMP_CLIENT_ID}`;
+};
 
 export {
-  setAuthToken,
-};
+  setAccessToken,
+  setClientID,
+  setTempClientID,
+  Genres,
 
+};

@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { GENRES } from '../../constants/genre';
+import { browse } from '../../constants/pathnames';
+
+function getGenreLink(genre) {
+  return `${browse}/${genre || DEFAULT_GENRE}`;
+}
 
 function Logo() {
   return (
@@ -58,7 +63,7 @@ function Header({ currentUser, selectedGenre, onLogin, onLogout }) {
 
 function mapStateToProps(state) {
   return {
-    currentUser: state.session.user,
+    // currentUser: state.session.user,
     selectedGenre: state.browse.selectedGenre
   };
 }
@@ -71,9 +76,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 Header.propTypes = {
-  currentUser: PropTypes.object.isRequired,
-  onLogin: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired,
+  currentUser: PropTypes.object,
+  onLogin: PropTypes.func,
+  onLogout: PropTypes.func,
 };
 
-export default connect(null, null)(Header);
+export default connect(mapStateToProps, null)(Header);

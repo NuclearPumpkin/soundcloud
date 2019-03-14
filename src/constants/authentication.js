@@ -1,4 +1,5 @@
 const isDev = process.env.NODE_ENV === 'development';
+
 export const REDIRECT_URI = isDev
   ? `${window.location.protocol}//${window.location.host}/callback`
   : 'http://www.favesound.de/callback';

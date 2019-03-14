@@ -1,5 +1,5 @@
-import { fetchData } from './app';
+import { setSelectedGenre } from './browse';
 
 export {
-    fetchData
-}
+  setSelectedGenre,
+};
