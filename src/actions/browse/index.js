@@ -1,6 +1,4 @@
-// import { arrayOf, normalize } from 'normalizr';
 import * as actionTypes from '../../constants/actionTypes';
-import * as requestTypes from '../../constants/requestTypes';
 
 export function setSelectedGenre(genre) {
   return {
@@ -9,8 +7,12 @@ export function setSelectedGenre(genre) {
   };
 }
 
-export const fetchActivitiesByGenre = (nextHref, genre) => (dispatch, getState) => {
-  const requestType = requestTypes.GENRES;
-  const initHref = unauthApiUrl(`tracks?linked_partitioning=1&limit=20&offset=0&tags=${genre}`, '&');
-
+export const fetchActivitiesByGenre = (nextHref, genre) => {
+  const initHref = `tracks?linked_partitioning=1&limit=20&offset=0&tags=${genre}`;
+  const url = nextHref || initHref;
+  return {
+    type: actionTypes.FETCH_ACTIVITIES,
+    url,
+    symbol: '&',
+  };
 };

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { GENRES } from '../../constants/genre';
 import { browse } from '../../constants/pathnames';
 
@@ -45,17 +44,12 @@ function MenuList({ selectedGenre }) {
   );
 }
 
-function Header({ currentUser, selectedGenre, onLogin, onLogout }) {
+function Header({ selectedGenre }) {
   return (
     <div className="header">
       <div className="header-content">
         <Logo />
         <MenuList selectedGenre={selectedGenre} />
-        {/* <SessionAction
-          currentUser={currentUser}
-          onLogin={onLogin}
-          onLogout={onLogout}
-        /> */}
       </div>
     </div>
   );
@@ -63,17 +57,10 @@ function Header({ currentUser, selectedGenre, onLogin, onLogout }) {
 
 function mapStateToProps(state) {
   return {
-    // currentUser: state.session.user,
     selectedGenre: state.browse.selectedGenre
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onLogin: bindActionCreators(actions.login, dispatch),
-    onLogout: bindActionCreators(actions.logout, dispatch),
-  };
-}
 
 Header.propTypes = {
   currentUser: PropTypes.object,

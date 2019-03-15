@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 // import { SORT_FUNCTIONS, DATE_SORT_FUNCTIONS } from '../../constants/sort';
 // import { DURATION_FILTER_FUNCTIONS } from '../../constants/durationFilter';
 import * as actions from '../../actions/index';
-// import * as requestTypes from '../../constants/requestTypes';
+import * as requestTypes from '../../constants/requestTypes';
 // import StreamInteractions from '../../components/StreamInteractions';
 // import Activities from '../../components/Activities';
 // import LoadingSpinner from '../../components/LoadingSpinner';
@@ -14,7 +14,7 @@ import * as actions from '../../actions/index';
 // import { getArtistFilter } from "../../constants/artistFilter";
 
 class Browse extends React.Component {
-  constructor() {
+  constructor(props) {
     super(props);
     this.fetchActivitiesByGenre = this.fetchActivitiesByGenre.bind(this);
   }
@@ -50,9 +50,14 @@ class Browse extends React.Component {
   }
 
   fetchActivitiesByGenre() {
-    const { match, paginateLinks } = this.props;
+    const { match, paginateLinks, requestsInProcess } = this.props;
     const genre = match.params.genre;
     const nextHref = paginateLinks[genre];
+    const requestType = requestTypes.GENRES;
+
+    if (requestsInProcess[requestType]) { return; }
+
+    this.props.setRequestInProgress(true, requestType);
     this.props.fetchActivitiesByGenre(nextHref, genre);
   }
 
@@ -63,11 +68,11 @@ class Browse extends React.Component {
   }
 
   render() {
-    const { browseActivities, match, requestsInProcess, trackEntities,
-      activeFilter, activeSort, activeDateSort } = this.props;
-    const genre = match.params.genre;
+    // const { match } = this.props;
+    // const genre = match.params.genre;
     return (
       <div className="browse">
+        <h3>BROWSE</h3>
         {/* <StreamInteractions />
         <Activities
           isLoading={requestsInProcess[requestTypes.GENRES] && !browseActivities[genre]}
@@ -87,15 +92,19 @@ class Browse extends React.Component {
 function mapStateToProps(state) {
   return {
     browseActivities: state.browse,
+    requestsInProcess: state.request,
+    paginateLinks: state.paginate,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     setSelectedGenre: bindActionCreators(actions.setSelectedGenre, dispatch),
-    fetchActivitiesByGenre: bindActionCreators(actions.fetchActivitiesByGenre, dispatch)
+    fetchActivitiesByGenre: bindActionCreators(actions.fetchActivitiesByGenre, dispatch),
+    setRequestInProgress: bindActionCreators(actions.setRequestInProcess, dispatch),
   };
 }
+
 
 Browse.propTypes = {
   browseActivities: PropTypes.object,

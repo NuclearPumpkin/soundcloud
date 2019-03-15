@@ -7,7 +7,7 @@ import { CLIENT_ID, TEMP_CLIENT_ID } from '../constants/authentication';
 const superagent = superagentPromise(_superagent, global.Promise);
 const API_ROOT = `//api.soundcloud.com/`;
 //  eslint-disable-next-line
-let AUTH_PARAM = null;
+let AUTH_PARAM = `client_id=${CLIENT_ID}`;
 
 const responseBody = res => res.body;
 
@@ -15,7 +15,7 @@ const requests = {
   get: (url) => superagent.get(`${API_ROOT}${url}${AUTH_PARAM}`).then(responseBody),
 };
 
-const Genres = {
+const Activities = {
   get: (url, symbol) => requests.get(`${url}${symbol}`),
 };
 
@@ -39,6 +39,6 @@ export {
   setAccessToken,
   setClientID,
   setTempClientID,
-  Genres,
+  Activities,
 
 };
